@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">EuroExplorer</string>
+
+    <string name="new_game">New Game</string>
+    <string name="settings">Settings</string>
+
+    <string name="continue_game">Continue</string>
+
+    <string name="question_capital">Ποια είναι η πρωτεύουσα</string>
+</resources>

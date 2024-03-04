@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class Question(
     val question: String,
     val options: List<String>,
-    val correctAnswer: String
+    val correct_answer: String
 )
 
 /*  {

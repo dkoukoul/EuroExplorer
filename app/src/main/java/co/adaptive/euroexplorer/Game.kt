@@ -50,7 +50,7 @@ class Game(private val context: Context) {
 
     // Method to check if the given answer is correct
     fun checkAnswer(answer: String): Boolean {
-        val correctAnswer = questions[currentQuestion].correctAnswer
+        val correctAnswer = questions[currentQuestion].correct_answer
         updateScore(answer == correctAnswer)
         return answer == correctAnswer
     }

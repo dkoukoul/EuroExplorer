@@ -1,9 +1,12 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
     kotlin("plugin.serialization")
 }
+
 
 android {
     namespace = "co.adaptive.euroexplorer"
@@ -17,6 +20,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val properties = Properties()
+        properties.load(project.rootProject.file("secrets.properties").inputStream())
+        val googleMapsApiKey = properties.getProperty("GoogleMapsApiKey")
+        buildConfigField("String", "GoogleMapsApiKey", "\"${googleMapsApiKey}\"")
+        resValue("string", "Google_Maps_Api_Key", googleMapsApiKey)
     }
 
     buildTypes {

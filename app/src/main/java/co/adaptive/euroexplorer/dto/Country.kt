@@ -3,16 +3,14 @@ package co.adaptive.euroexplorer.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Country : ArrayList<CountriesItem>()
-
-@Serializable
-data class CountriesItem(
-    val area: Int,
+data class Country(
+    val name: String,
+    val coordinates: String,
+    val area: Double,
     val capital: String,
     val countryCode: String,
     val density: Double,
     val language: List<String>,
-    val name: String,
     val population: Int,
     val article: String,
     val eu: Boolean

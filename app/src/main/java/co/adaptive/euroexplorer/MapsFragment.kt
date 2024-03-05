@@ -2,6 +2,7 @@ package co.adaptive.euroexplorer
 
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -18,14 +20,31 @@ class MapsFragment : Fragment() {
     private lateinit var question: TextView
     private lateinit var notification: TextView
     private lateinit var gameLogic: Game
+    private var gameType: GameTypes = GameTypes.CAPITAL
+    private lateinit var googleMap: GoogleMap
+//    private val sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
 
-    private val callback = OnMapReadyCallback { googleMap ->
+    private val callback = OnMapReadyCallback { gM ->
+        googleMap = gM
         val europe = LatLng(54.5260, 15.2551)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(europe,3.0f))
         googleMap.setOnMapClickListener { latLng ->
-            val geocoder = context?.let { Geocoder(it, Locale.getDefault()) }
-            val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            setAnswer(gameLogic.checkAnswer(addresses!![0].countryName))
+            val geocoder = context?.let { Geocoder(it, Locale("el")) }
+            if (gameType == GameTypes.CAPITAL) {
+                val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 6)
+                addresses?.let {
+                    val result = gameLogic.checkAnswers(it)
+                    setAnswer(result)
+                } ?: run {
+                    // Handle the case where addresses is null
+                    Log.e("MapsFragment", "No addresses found")
+                }
+            } else {
+                val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 1)
+                setAnswer(gameLogic.checkAnswer(addresses!![0].countryName))
+            }
+
+            nextQuestion()
         }
     }
 
@@ -36,10 +55,12 @@ class MapsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_maps, container, false)
         gameLogic = Game(requireContext())
-        gameLogic.loadQuestions()
+//        gameType = sharedPreferencesHelper.getGameType()!!
         question = view.findViewById(R.id.question)
         notification = view.findViewById(R.id.notification)
-        loadQuestion()
+
+        question.text = gameLogic.getQuestion()
+
         return view
     }
 
@@ -71,5 +92,23 @@ class MapsFragment : Fragment() {
         notification.visibility = View.VISIBLE
     }
 
+    private fun nextQuestion() {
+        try {
+            question.text = gameLogic.getQuestion()
+            if (gameType == GameTypes.CAPITAL) {
+                val country = gameLogic.getCurrentCountry()
+                if (country != null) {
+                    val latLng = LatLng(country.coordinates.split(",")[0].toDouble(), country.coordinates.split(",")[1].toDouble())
+                    val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+                    mapFragment?.getMapAsync { googleMap ->
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5.0f))
+                    }
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5.0f))
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("MapsFragment", "Error getting next question", e)
+        }
 
+    }
 }

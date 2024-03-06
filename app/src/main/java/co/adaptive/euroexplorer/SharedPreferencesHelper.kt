@@ -14,11 +14,16 @@ class SharedPreferencesHelper(context: Context) {
     }
 
     fun getGameType(): GameTypes {
-        if ((sharedPreferences.getString("GameType", null) == null) ||
-            (sharedPreferences.getString("GameType", null) == "CAPITAL")) {
+        if (sharedPreferences.getString("GameType", null) == null) {
+            return GameTypes.COUNTRY
+        } else if (sharedPreferences.getString("GameType", null) == "CAPITAL") {
             return GameTypes.CAPITAL
+        } else if (sharedPreferences.getString("GameType", null) == "COUNTRY") {
+            return GameTypes.COUNTRY
+        } else if (sharedPreferences.getString("GameType", null) == "FLAG") {
+            return GameTypes.FLAG
         } else {
-            return GameTypes.CAPITAL
+            return GameTypes.COUNTRY
         }
     }
 

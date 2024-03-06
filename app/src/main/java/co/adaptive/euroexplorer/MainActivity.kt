@@ -1,6 +1,7 @@
 package co.adaptive.euroexplorer
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -19,13 +20,27 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         val sharedPreferencesHelper = SharedPreferencesHelper(baseContext)
-        val buttonNewGame = findViewById<Button>(R.id.button_new_game)
-        buttonNewGame.setOnClickListener {
-            //TODO: select game type
+        val buttonNewCapitals = findViewById<Button>(R.id.button_new_capitals)
+        buttonNewCapitals.setOnClickListener {
             sharedPreferencesHelper.saveGameType(GameTypes.CAPITAL)
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.main, MapsFragment())
-            transaction.commit()
+            loadMap()
         }
+        val buttonNewCountries = findViewById<Button>(R.id.button_new_countries)
+        buttonNewCountries.setOnClickListener {
+            sharedPreferencesHelper.saveGameType(GameTypes.COUNTRY)
+            loadMap()
+        }
+        val buttonNewFlags = findViewById<Button>(R.id.button_new_flags)
+        buttonNewFlags.setOnClickListener {
+            sharedPreferencesHelper.saveGameType(GameTypes.FLAG)
+            loadMap()
+        }
+    }
+
+    private fun loadMap() {
+        Log.d("MainActivity", "Loading map")
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.main, MapsFragment())
+        transaction.commit()
     }
 }

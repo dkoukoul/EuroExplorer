@@ -20,8 +20,9 @@ class Game(private val context: Context) {
         private var questionsCapitalsAsked = mutableListOf<Int>()
         private var questions = mutableListOf<Question>()
         private var countries = mutableListOf<Country>()
-        private var gameType: GameTypes = GameTypes.CAPITAL
     }
+
+    var gameType: GameTypes = GameTypes.CAPITAL
 
     init {
         loadQuestions()
@@ -31,7 +32,7 @@ class Game(private val context: Context) {
 
     fun init() {
         val sharedPreferencesHelper = SharedPreferencesHelper(context)
-        gameType = sharedPreferencesHelper.getGameType()!!
+        gameType = sharedPreferencesHelper.getGameType()
     }
 
     // Method to load questions from JSON file
@@ -70,12 +71,15 @@ class Game(private val context: Context) {
     fun getQuestion(): String {
         return if (gameType == GameTypes.CAPITAL) {
             getQuestionCapital()
+        } else if (gameType == GameTypes.COUNTRY) {
+            getCountryQuestion()
         } else {
-            getGeneralQuestion()
+            Log.e(TAG, "Invalid game type")
+            ""
         }
     }
 
-    private fun getGeneralQuestion(): String {
+    private fun getCountryQuestion(): String {
         val possibleQuestions = (questions.indices).toMutableList()
         possibleQuestions.removeAll(questionsAsked)
         if (possibleQuestions.isEmpty()) {
@@ -107,15 +111,12 @@ class Game(private val context: Context) {
     }
 
     // Method to check if the given answer is correct
-    fun checkAnswer(answer: String): Boolean {
-        if (gameType == GameTypes.CAPITAL) {
-            return checkAnswerCapital(answer)
-        } else {
-            return checkAnswerGeneral(answer)
-        }
+    fun checkAnswer(answer: String): Pair<Boolean, String> {
+        return checkAnswerCountry(answer)
     }
 
-    fun checkAnswers(answers: List<Address>): Boolean {
+    fun checkAnswers(answers: List<Address>): Pair<Boolean, String> {
+        val correctAnswer = countries[currentQuestion].capital
         if (gameType == GameTypes.CAPITAL) {
             for (address in answers) {
                 if ((!address.adminArea.isNullOrEmpty() && checkAnswerCapital(address.adminArea)) ||
@@ -125,15 +126,15 @@ class Game(private val context: Context) {
                     (!address.subLocality.isNullOrEmpty() && checkAnswerCapital(address.subLocality))){
 
                     setScore(true)
-                    return true
+                    return Pair(true, correctAnswer)
                 }
             }
             // No correct answer found
             setScore(false)
-            return false
+            return Pair(false,correctAnswer)
         } else {
             Log.e(TAG, "Invalid game type")
-            return false
+            return Pair(false,correctAnswer)
         }
     }
     private fun checkAnswerCapital(answer: String): Boolean {
@@ -145,10 +146,10 @@ class Game(private val context: Context) {
         return false
     }
 
-    private fun checkAnswerGeneral(answer: String): Boolean {
+    private fun checkAnswerCountry(answer: String): Pair<Boolean, String> {
         val correctAnswer = questions[currentQuestion].correct_answer
         setScore(answer == correctAnswer)
-        return answer == correctAnswer
+        return Pair(answer == correctAnswer, correctAnswer)
     }
 
     // Method to update the score, 3 points for correct answer, 1 point for incorrect answer

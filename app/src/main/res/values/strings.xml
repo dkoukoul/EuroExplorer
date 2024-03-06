@@ -7,4 +7,7 @@
     <string name="continue_game">Continue</string>
 
     <string name="question_capital">Ποια είναι η πρωτεύουσα</string>
+
+    <string name="notification_success">Μπράβο απαντήσες σωστά!</string>
+    <string name="notification_wrong_answer">Η σωστή απάντηση είναι</string>
 </resources>

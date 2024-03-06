@@ -5,4 +5,9 @@
 
     <color name="correct">#81C784</color>
     <color name="incorrect">#E57373</color>
+
+    <color name="primary">#4db9bd</color>
+    <color name="secondary">#b3afc5</color>
+    <color name="accent">#9e8fad</color>
+    <color name="text">#111717</color>
 </resources>

@@ -1,11 +1,17 @@
 package co.adaptive.euroexplorer
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,10 +22,23 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import java.util.Locale
 
+class SingleTapMapClickListener(private val actualListener: GoogleMap.OnMapClickListener) : GoogleMap.OnMapClickListener {
+    private var lastClickTime: Long = 0
+
+    override fun onMapClick(point: LatLng) {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastClickTime > 1000) { // 1000 ms = 1 s
+            lastClickTime = currentTime
+            actualListener.onMapClick(point)
+        }
+    }
+}
+
 class MapsFragment : Fragment() {
     private lateinit var question: TextView
     private lateinit var notification: TextView
     private lateinit var score: TextView
+    private lateinit var airplane: ImageView
     private lateinit var gameLogic: Game
     private lateinit var googleMap: GoogleMap
 
@@ -27,7 +46,7 @@ class MapsFragment : Fragment() {
         googleMap = gM
         val europe = LatLng(54.5260, 15.2551)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(europe,3.5f))
-        googleMap.setOnMapClickListener { latLng ->
+        googleMap.setOnMapClickListener(SingleTapMapClickListener { latLng ->
             val geocoder = context?.let { Geocoder(it, Locale("el")) }
             try {
                 if (gameLogic.gameType == GameTypes.CAPITAL) {
@@ -44,7 +63,7 @@ class MapsFragment : Fragment() {
                     val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 1)
                     if (addresses.isNullOrEmpty()) {
                         Log.e("MapsFragment", "No addresses found")
-                        return@setOnMapClickListener
+                        return@SingleTapMapClickListener
                     } else {
                         val result = gameLogic.checkAnswer(addresses[0].countryName)
                         setAnswer(result.first, result.second)
@@ -57,7 +76,7 @@ class MapsFragment : Fragment() {
                 Log.e("MapsFragment", "Error getting location", e)
             }
             nextQuestion()
-        }
+        })
     }
 
     override fun onCreateView(
@@ -70,7 +89,7 @@ class MapsFragment : Fragment() {
         question = view.findViewById(R.id.question)
         notification = view.findViewById(R.id.notification)
         score = view.findViewById(R.id.score)
-
+        airplane = view.findViewById(R.id.airplane)
         question.text = gameLogic.getQuestion()
 
         return view
@@ -93,9 +112,29 @@ class MapsFragment : Fragment() {
         notification.visibility = View.INVISIBLE
     }
 
+    private fun airplaneAnimation() {
+        val slideInAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_in)
+        slideInAnimation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {
+                airplane.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationEnd(animation: Animation) {
+                airplane.visibility = View.INVISIBLE
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {
+                // Do nothing
+            }
+        })
+
+        airplane.startAnimation(slideInAnimation)
+    }
+
     private fun setAnswer(correct: Boolean, answer: String) {
         if (correct) {
             notification.text = getString(R.string.notification_success)
+            airplaneAnimation()
 //            notification.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.correct))
         } else {
             notification.text = getString(R.string.notification_wrong_answer)+ " " + answer
@@ -106,8 +145,59 @@ class MapsFragment : Fragment() {
 
     private fun updateScore() {
         score.text = gameLogic.getScore().toString()
+        animateScore()
     }
 
+    private fun animateScore() {
+        // Set up the animation
+        val scoreAnimatorX: ObjectAnimator = ObjectAnimator.ofFloat<View>(
+            score,
+            View.SCALE_X,
+            1f,
+            2f
+        )
+        scoreAnimatorX.setDuration(1000) // Duration of animation in milliseconds
+
+        // Add an animation listener to handle animation completion
+        scoreAnimatorX.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                // Reverse the animation
+                val reverseAnimator: ObjectAnimator = ObjectAnimator.ofFloat<View>(
+                    score,
+                    View.SCALE_X,
+                    2f,
+                    1f
+                )
+                reverseAnimator.setDuration(1000) // Duration of animation in milliseconds
+                reverseAnimator.start()
+            }
+        })
+        val scoreAnimatorY: ObjectAnimator = ObjectAnimator.ofFloat<View>(
+            score,
+            View.SCALE_Y,
+            1f,2f
+        )
+        scoreAnimatorY.setDuration(1000) // Duration of animation in milliseconds
+
+        // Add an animation listener to handle animation completion
+        scoreAnimatorY.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                // Reverse the animation
+                val reverseAnimator: ObjectAnimator = ObjectAnimator.ofFloat<View>(
+                    score,
+                    View.SCALE_Y,
+                    2f,1f
+                )
+                reverseAnimator.setDuration(1000) // Duration of animation in milliseconds
+                reverseAnimator.start()
+            }
+        })
+        // Start the animation
+        scoreAnimatorX.start()
+        scoreAnimatorY.start()
+    }
     private fun nextQuestion() {
         try {
             question.text = gameLogic.getQuestion()

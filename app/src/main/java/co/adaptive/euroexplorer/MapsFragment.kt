@@ -20,7 +20,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
 
 class SingleTapMapClickListener(private val actualListener: GoogleMap.OnMapClickListener) : GoogleMap.OnMapClickListener {
     private var lastClickTime: Long = 0
@@ -46,39 +45,31 @@ class MapsFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { gM ->
         googleMap = gM
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style));
+        //googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style));
         val europe = LatLng(54.5260, 15.2551)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(europe,3.5f))
         googleMap.setOnMapClickListener(SingleTapMapClickListener { latLng ->
             val geocoder = context?.let { Geocoder(it) }
             try {
+                Log.i("MapsFragment", "[onMapClick] ${gameLogic.gameType}")
+                val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 1)
                 if (gameLogic.gameType == GameTypes.CAPITAL) {
-                    val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 1)
-
                     val result = addresses?.get(0)?.let { gameLogic.checkAnswerCapital(it) }
                     if (result != null) {
                         setAnswer(result.first, result.second)
                         updateScore()
                     }
-
-                } else if (gameLogic.gameType == GameTypes.COUNTRY) {
-                    val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 1)
-                    if (addresses.isNullOrEmpty()) {
-                        Log.e("MapsFragment", "No addresses found")
-                        return@SingleTapMapClickListener
-                    } else {
-                        val result = gameLogic.checkAnswer(addresses[0].countryName)
+                } else if ((gameLogic.gameType == GameTypes.COUNTRY) || (gameLogic.gameType == GameTypes.FLAG)){
+                    val result = addresses?.get(0)?.let { gameLogic.checkAnswer(it.countryName) }
+                    if (result != null) {
                         setAnswer(result.first, result.second)
-                        updateScore()
                     }
-                } else if (gameLogic.gameType == GameTypes.FLAG) {
-                    Log.e("MapsFragment", "Game type not supported")
-
+                    updateScore()
                 } else {
-                    Log.e("MapsFragment", "Game type not supported")
+                    Log.e("MapsFragment", "[onMapClick] Game type not supported")
                 }
             } catch (e: Exception) {
-                Log.e("MapsFragment", "Error getting location", e)
+                Log.e("MapsFragment", "[onMapClick] Error getting location", e)
             }
             nextQuestion()
         })
@@ -96,11 +87,10 @@ class MapsFragment : Fragment() {
         notification = view.findViewById(R.id.notification)
         score = view.findViewById(R.id.score)
         airplane = view.findViewById(R.id.airplane)
-        question.text = gameLogic.getQuestion()
         flag = view.findViewById(R.id.flagImage)
         cloudsContainer = view.findViewById(R.id.cloudsContainer)
         flag.visibility = View.INVISIBLE
-
+        nextQuestion()
         return view
     }
 
@@ -115,6 +105,134 @@ class MapsFragment : Fragment() {
         notification.text = ""
         notification.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
         notification.visibility = View.INVISIBLE
+    }
+
+
+    private fun setAnswer(correct: Boolean, answer: String) {
+        Log.i("MapsFragment", "[setAnswer] $correct $answer")
+        if (correct) {
+            notification.text = getString(R.string.notification_success)
+            airplaneAnimation()
+//            notification.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.correct))
+        } else {
+            notification.text = getString(R.string.notification_wrong_answer)+ " " + answer
+//            notification.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.incorrect))
+        }
+        notification.visibility = View.VISIBLE
+    }
+
+    private fun updateScore() {
+        Log.i("MapsFragment", "[updateScore]")
+        score.text = gameLogic.getScore().toString()
+        animateCloud()
+        animateScore()
+    }
+
+
+    private fun nextQuestion() {
+        Log.i("MapsFragment", "[nextQuestion] ${gameLogic.gameType}")
+        try {
+            question.text = gameLogic.getQuestion()
+            if (gameLogic.gameType == GameTypes.CAPITAL) {
+                val country = gameLogic.getCurrentCountry()
+                val latLng = LatLng(
+                    country.coordinates.split(",")[0].toDouble(),
+                    country.coordinates.split(",")[1].toDouble()
+                )
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5.0f))
+            } else if (gameLogic.gameType == GameTypes.FLAG) {
+                val drawableId = gameLogic.getCurrentFlag()
+                val drawableFlag = ContextCompat.getDrawable(requireContext(), drawableId)
+                flag.setImageDrawable(drawableFlag)
+                flag.visibility = View.VISIBLE
+            } else {
+                Log.e("MapsFragment", "Game type not supported")
+            }
+        } catch (e: Exception) {
+            Log.e("MapsFragment", "Error getting next question", e)
+        }
+
+    }
+
+    private fun animateCloud() {
+        Log.i("MapsFragment", "[animateCloud]")
+        try {
+            // Create the fade out animation
+            val fadeOut = ObjectAnimator.ofFloat(cloudsContainer, "alpha", 1f, 0f)
+            fadeOut.duration = 500 // Duration in milliseconds
+
+            // Create the fade in animation
+            val fadeIn = ObjectAnimator.ofFloat(cloudsContainer, "alpha", 0f, 1f)
+            fadeIn.duration = 500 // Duration in milliseconds
+
+            // Add an animation listener to the fade out animation to start the fade in animation when the fade out animation ends
+            fadeOut.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    fadeIn.start()
+                }
+            })
+
+            // Start the fade out animation
+            fadeOut.start()
+        } catch (e: Exception) {
+            Log.e("MapsFragment", "Error animating clouds", e)
+        }
+    }
+    private fun animateScore() {
+        Log.i("MapsFragment", "[animateScore]")
+        try {
+
+
+            // Set up the animation
+            val scoreAnimatorX: ObjectAnimator = ObjectAnimator.ofFloat<View>(
+                score,
+                View.SCALE_X,
+                1f, 2f
+            )
+            scoreAnimatorX.setDuration(1000) // Duration of animation in milliseconds
+
+            // Add an animation listener to handle animation completion
+            scoreAnimatorX.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    // Reverse the animation
+                    val reverseAnimator: ObjectAnimator = ObjectAnimator.ofFloat<View>(
+                        score,
+                        View.SCALE_X,
+                        2f,
+                        1f
+                    )
+                    reverseAnimator.setDuration(1000) // Duration of animation in milliseconds
+                    reverseAnimator.start()
+                }
+            })
+            val scoreAnimatorY: ObjectAnimator = ObjectAnimator.ofFloat<View>(
+                score,
+                View.SCALE_Y,
+                1f, 2f
+            )
+            scoreAnimatorY.setDuration(1000) // Duration of animation in milliseconds
+
+            // Add an animation listener to handle animation completion
+            scoreAnimatorY.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    // Reverse the animation
+                    val reverseAnimator: ObjectAnimator = ObjectAnimator.ofFloat<View>(
+                        score,
+                        View.SCALE_Y,
+                        2f, 1f
+                    )
+                    reverseAnimator.setDuration(1000) // Duration of animation in milliseconds
+                    reverseAnimator.start()
+                }
+            })
+            // Start the animation
+            scoreAnimatorX.start()
+            scoreAnimatorY.start()
+        } catch (e: Exception) {
+            Log.e("MapsFragment", "Error animating score", e)
+        }
     }
 
     private fun airplaneAnimation() {
@@ -134,115 +252,5 @@ class MapsFragment : Fragment() {
         })
 
         airplane.startAnimation(slideInAnimation)
-    }
-
-    private fun setAnswer(correct: Boolean, answer: String) {
-        if (correct) {
-            notification.text = getString(R.string.notification_success)
-            airplaneAnimation()
-//            notification.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.correct))
-        } else {
-            notification.text = getString(R.string.notification_wrong_answer)+ " " + answer
-//            notification.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.incorrect))
-        }
-        notification.visibility = View.VISIBLE
-    }
-
-    private fun updateScore() {
-        score.text = gameLogic.getScore().toString()
-        animateCloud()
-        animateScore()
-    }
-
-    private fun animateCloud() {
-        // Create the fade out animation
-        val fadeOut = ObjectAnimator.ofFloat(cloudsContainer, "alpha", 1f, 0f)
-        fadeOut.duration = 500 // Duration in milliseconds
-
-        // Create the fade in animation
-        val fadeIn = ObjectAnimator.ofFloat(cloudsContainer, "alpha", 0f, 1f)
-        fadeIn.duration = 500 // Duration in milliseconds
-
-        // Add an animation listener to the fade out animation to start the fade in animation when the fade out animation ends
-        fadeOut.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                fadeIn.start()
-            }
-        })
-
-        // Start the fade out animation
-        fadeOut.start()
-    }
-    private fun animateScore() {
-        // Set up the animation
-        val scoreAnimatorX: ObjectAnimator = ObjectAnimator.ofFloat<View>(
-            score,
-            View.SCALE_X,
-            1f, 2f
-        )
-        scoreAnimatorX.setDuration(1000) // Duration of animation in milliseconds
-
-        // Add an animation listener to handle animation completion
-        scoreAnimatorX.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                super.onAnimationEnd(animation)
-                // Reverse the animation
-                val reverseAnimator: ObjectAnimator = ObjectAnimator.ofFloat<View>(
-                    score,
-                    View.SCALE_X,
-                    2f,
-                    1f
-                )
-                reverseAnimator.setDuration(1000) // Duration of animation in milliseconds
-                reverseAnimator.start()
-            }
-        })
-        val scoreAnimatorY: ObjectAnimator = ObjectAnimator.ofFloat<View>(
-            score,
-            View.SCALE_Y,
-            1f,2f
-        )
-        scoreAnimatorY.setDuration(1000) // Duration of animation in milliseconds
-
-        // Add an animation listener to handle animation completion
-        scoreAnimatorY.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                super.onAnimationEnd(animation)
-                // Reverse the animation
-                val reverseAnimator: ObjectAnimator = ObjectAnimator.ofFloat<View>(
-                    score,
-                    View.SCALE_Y,
-                    2f,1f
-                )
-                reverseAnimator.setDuration(1000) // Duration of animation in milliseconds
-                reverseAnimator.start()
-            }
-        })
-        // Start the animation
-        scoreAnimatorX.start()
-        scoreAnimatorY.start()
-    }
-    private fun nextQuestion() {
-        try {
-            question.text = gameLogic.getQuestion()
-            if (gameLogic.gameType == GameTypes.CAPITAL) {
-                val country = gameLogic.getCurrentCountry()
-                val latLng = LatLng(
-                    country.coordinates.split(",")[0].toDouble(),
-                    country.coordinates.split(",")[1].toDouble()
-                )
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5.0f))
-            } else if (gameLogic.gameType == GameTypes.FLAG) {
-                Log.e("MapsFragment", "Game type not supported")
-                val drawableId = gameLogic.getCurrentFlag()
-                val drawableFlag = ContextCompat.getDrawable(requireContext(), drawableId)
-                flag.setImageDrawable(drawableFlag)
-            } else {
-                Log.e("MapsFragment", "Game type not supported")
-            }
-        } catch (e: Exception) {
-            Log.e("MapsFragment", "Error getting next question", e)
-        }
-
     }
 }

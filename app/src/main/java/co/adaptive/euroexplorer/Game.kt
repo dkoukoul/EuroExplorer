@@ -17,7 +17,8 @@ class Game(private val context: Context) {
         private const val TAG = "Game"
         private var score = 0
         private var currentQuestion = 0
-        private var questionsAsked = mutableListOf<Int>()
+        private var questionsCountriesAsked = mutableListOf<Int>()
+        private var questionsFlagsAsked = mutableListOf<Int>()
         private var questionsCapitalsAsked = mutableListOf<Int>()
         private var questions = mutableListOf<Question>()
         private var countries = mutableListOf<Country>()
@@ -83,17 +84,19 @@ class Game(private val context: Context) {
     }
 
     private fun getCountryQuestion(): String {
+        Log.i(TAG, "[getCountryQuestion]")
         val possibleQuestions = (questions.indices).toMutableList()
-        possibleQuestions.removeAll(questionsAsked)
+        possibleQuestions.removeAll(questionsCountriesAsked)
         if (possibleQuestions.isEmpty()) {
             Log.w(TAG, "No more questions to ask")
         }
         currentQuestion = possibleQuestions[Random.nextInt(possibleQuestions.size)]
-        questionsAsked.add(currentQuestion)
+        questionsCountriesAsked.add(currentQuestion)
         return questions[currentQuestion].question
     }
 
     private fun getQuestionCapital(): String {
+        Log.i(TAG, "[getQuestionCapital]")
         var question = context.getString(R.string.question_capital)
         val possibleQuestions = (countries.indices).toMutableList()
         possibleQuestions.removeAll(questionsCapitalsAsked)
@@ -106,13 +109,15 @@ class Game(private val context: Context) {
     }
 
     private fun getQuestionFlag(): String {
+        Log.i(TAG, "[getQuestionFlag]")
         var question = context.getString(R.string.question_flag)
         val possibleQuestions = (countries.indices).toMutableList()
-        possibleQuestions.removeAll(questionsCapitalsAsked)
+        possibleQuestions.removeAll(questionsFlagsAsked)
         if (possibleQuestions.isEmpty()) {
             Log.w(TAG, "No more questions to ask")
         }
         currentQuestion = possibleQuestions[Random.nextInt(possibleQuestions.size)]
+        questionsFlagsAsked.add(currentQuestion)
         return question
     }
 

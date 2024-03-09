@@ -42,6 +42,7 @@ class MapsFragment : Fragment() {
     private lateinit var gameLogic: Game
     private lateinit var googleMap: GoogleMap
     private lateinit var flag: ImageView
+    private lateinit var cloudsContainer: View
 
     private val callback = OnMapReadyCallback { gM ->
         googleMap = gM
@@ -97,6 +98,7 @@ class MapsFragment : Fragment() {
         airplane = view.findViewById(R.id.airplane)
         question.text = gameLogic.getQuestion()
         flag = view.findViewById(R.id.flagImage)
+        cloudsContainer = view.findViewById(R.id.cloudsContainer)
         flag.visibility = View.INVISIBLE
 
         return view
@@ -148,9 +150,29 @@ class MapsFragment : Fragment() {
 
     private fun updateScore() {
         score.text = gameLogic.getScore().toString()
+        animateCloud()
         animateScore()
     }
 
+    private fun animateCloud() {
+        // Create the fade out animation
+        val fadeOut = ObjectAnimator.ofFloat(cloudsContainer, "alpha", 1f, 0f)
+        fadeOut.duration = 500 // Duration in milliseconds
+
+        // Create the fade in animation
+        val fadeIn = ObjectAnimator.ofFloat(cloudsContainer, "alpha", 0f, 1f)
+        fadeIn.duration = 500 // Duration in milliseconds
+
+        // Add an animation listener to the fade out animation to start the fade in animation when the fade out animation ends
+        fadeOut.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                fadeIn.start()
+            }
+        })
+
+        // Start the fade out animation
+        fadeOut.start()
+    }
     private fun animateScore() {
         // Set up the animation
         val scoreAnimatorX: ObjectAnimator = ObjectAnimator.ofFloat<View>(

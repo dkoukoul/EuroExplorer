@@ -37,6 +37,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val currentFragment = supportFragmentManager.fragments.firstOrNull()
+        if (currentFragment is MapsFragment) {
+            supportFragmentManager.beginTransaction().remove(currentFragment).commit()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     private fun loadMap() {
         Log.d("MainActivity", "Loading map")
         val transaction = supportFragmentManager.beginTransaction()

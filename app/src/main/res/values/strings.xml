@@ -1,13 +1,14 @@
 <resources>
     <string name="app_name">EuroExplorer</string>
-
-    <string name="new_game">New Game</string>
-    <string name="settings">Settings</string>
-
+    <!-- Main Menu -->
+    <string name="button_capitals">Πρωτεύουσες</string>
+    <string name="button_countries">Χώρες</string>
+    <string name="button_flags">Σημαίες</string>
     <string name="continue_game">Continue</string>
-
+    <!-- Questions -->
     <string name="question_capital">Ποια είναι η πρωτεύουσα</string>
-
+    <string name="question_flag">Βρες τη χώρα </string>
+    <!-- Notifications -->
     <string name="notification_success">Μπράβο απαντήσες σωστά!</string>
     <string name="notification_wrong_answer">Η σωστή απάντηση είναι</string>
 </resources>

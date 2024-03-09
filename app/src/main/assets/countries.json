@@ -5,7 +5,11 @@
     "area": 61,
     "population": 33908,
     "density": 555.9,
-    "capital": "Πόλη του Αγίου Μαρίνου",
+    "capital": {
+      "name_el": "Πόλη του Αγίου Μαρίνου",
+      "name_en": "City of San Marino",
+      "coordinates": "43.9424, 12.4578"
+    },
     "language": ["Ιταλικά"],
     "countryCode": "sm",
     "article": "του Αγίου Μαρίνου",
@@ -17,7 +21,11 @@
     "area": 866,
     "population": 10151517,
     "density": 117.2,
-    "capital": "Μπακού",
+    "capital": {
+      "name_el": "Μπακού",
+      "name_en": "Baku",
+      "coordinates": "40.4093, 49.8671"
+    },
     "language": ["Αζερικά"],
     "countryCode": "az",
     "article": "του Αζερμπαϊτζάν",
@@ -29,7 +37,11 @@
     "area": 28748,
     "population": 2761785,
     "density": 96.1,
-    "capital": "Τίρανα",
+    "capital": {
+      "name_el": "Τίρανα",
+      "name_en": "Tirana",
+      "coordinates": "41.3275, 19.8187"
+    },
     "language": ["Αλβανικά"],
     "countryCode": "al",
     "article": "της Αλβανίας",
@@ -41,7 +53,11 @@
     "area": 468,
     "population": 8533,
     "density": 182.3,
-    "capital": "Ανδόρρα λα Βέλια",
+    "capital": {
+      "name_el": "Ανδόρρα",
+      "name_en": "Andorra la Vella",
+      "coordinates": "42.5063, 1.5218"
+    },
     "language": ["Καταλανικά"],
     "countryCode": "ad",
     "article": "της Ανδόρρας",
@@ -53,7 +69,11 @@
     "area": 298,
     "population": 2990900,
     "density": 100.4,
-    "capital": "Γερεβάν",
+    "capital": {
+      "name_el": "Ερεβάν",
+      "name_en": "Yerevan",
+      "coordinates": "40.1872, 44.5152"
+    },
     "language": ["Αρμενικά"],
     "countryCode": "am",
     "article": "της Αρμενίας",
@@ -65,7 +85,11 @@
     "area": 83858,
     "population": 9159993,
     "density": 109.2,
-    "capital": "Βιέννη",
+    "capital": {
+      "name_el": "Βιέννη",
+      "name_en": "Vienna",
+      "coordinates": "48.2082, 16.3738"
+    },
     "language": ["Γερμανικά"],
     "countryCode": "at",
     "article": "της Αυστρίας",
@@ -77,7 +101,11 @@
     "area": 0.44,
     "population": 800,
     "density": 1.818,
-    "capital": "Πόλη του Βατικανού",
+    "capital": {
+      "name_el": "Βατικανό",
+      "name_en": "Vatican City",
+      "coordinates": "41.9029, 12.4534"
+    },
     "language": ["Ιταλικά"],
     "countryCode": "va",
     "article": "του Βατικανού",
@@ -89,7 +117,11 @@
     "area": 30528,
     "population": 11808859,
     "density": 386.8,
-    "capital": "Βρυξέλλες",
+    "capital": {
+      "name_el": "Βρυξέλλες",
+      "name_en": "Brussels",
+      "coordinates": "50.8503, 4.3517"
+    },
     "language": ["Ολλανδικά", "Γαλλικά", "Γερμανικά"],
     "countryCode": "be",
     "article": "του Βελγίου",
@@ -101,7 +133,11 @@
     "area": 25713,
     "population": 1829954,
     "density": 71,
-    "capital": "Σκόπια",
+    "capital": {
+      "name_el": "Σκόπια",
+      "name_en": "Skopje",
+      "coordinates": "42.0033, 21.4316"
+    },
     "language": ["Σλαβομακεδονικά"],
     "countryCode": "mk",
     "article": "της Βόρειας Μακεδονίας",
@@ -113,7 +149,11 @@
     "area": 51129,
     "population": 3277082,
     "density": 64.1,
-    "capital": "Σαράγεβο",
+    "capital": {
+      "name_el": "Σαράγεβο",
+      "name_en": "Sarajevo",
+      "coordinates": "43.8563, 18.4131"
+    },
     "language": ["Βοσνιακά", "Κροατικά", "Σερβικά"],
     "countryCode": "ba",
     "article": "της Βοσνίας και Ερζεγοβίνης",
@@ -125,7 +165,11 @@
     "area": 11091,
     "population": 6447710,
     "density": 58.1,
-    "capital": "Σόφια",
+    "capital": {
+      "name_el": "Σόφια",
+      "name_en": "Sofia",
+      "coordinates": "42.6977, 23.3219"
+    },
     "language": ["Βουλγαρικά"],
     "countryCode": "bg",
     "article": "της Βουλγαρίας",
@@ -137,7 +181,11 @@
     "area": 54703,
     "population": 66143000,
     "density": 120.9,
-    "capital": "Παρίσι",
+    "capital": {
+      "name_el": "Παρίσι",
+      "name_en": "Paris",
+      "coordinates": "48.8566, 2.3522"
+    },
     "language": ["Γαλλικά"],
     "countryCode": "fr",
     "article": "της Γαλλίας",
@@ -149,7 +197,11 @@
     "area": 357021,
     "population": 84607016,
     "density": 237,
-    "capital": "Βερολίνο",
+    "capital": {
+      "name_el": "Βερολίνο",
+      "name_en": "Berlin",
+      "coordinates": "52.5200, 13.4050"
+    },
     "language": ["Γερμανικά"],
     "countryCode": "de",
     "article": "της Γερμανίας",
@@ -161,7 +213,11 @@
     "area": 697,
     "population": 3736400,
     "density": 53.6,
-    "capital": "Τιφλίδα",
+    "capital": {
+      "name_el": "Τιφλίδα",
+      "name_en": "Tbilisi",
+      "coordinates": "41.7151, 44.8271"
+    },
     "language": ["Γεωργιανά"],
     "countryCode": "ge",
     "article": "της Γεωργίας",
@@ -173,7 +229,11 @@
     "area": 43094,
     "population": 5961249,
     "density": 138.3,
-    "capital": "Κοπεγχάγη",
+    "capital": {
+      "name_el": "Κοπεγχάγη",
+      "name_en": "Copenhagen",
+      "coordinates": "55.6761, 12.5683"
+    },
     "language": ["Δανική"],
     "countryCode": "dk",
     "article": "της Δανίας",
@@ -185,7 +245,11 @@
     "area": 4129,
     "population": 8931306,
     "density": 216.3,
-    "capital": "Βέρνη",
+    "capital": {
+      "name_el": "Βερν",
+      "name_en": "Bern",
+      "coordinates": "46.9479, 7.4446"
+    },
     "language": ["Γερμανικά", "Γαλλικά", "Ιταλικά", "Ραιτορωμανικά"],
     "countryCode": "ch",
     "article": "της Ελβετίας",
@@ -197,7 +261,11 @@
     "area": 131957,
     "population": 10432481,
     "density": 79.1,
-    "capital": "Αθήνα",
+    "capital": {
+        "name_el": "Αθήνα",
+        "name_en": "Athens",
+        "coordinates": "37.9838, 23.7275"
+    },
     "language": ["Ελληνικά"],
     "countryCode": "gr",
     "article": "της Ελλάδας",
@@ -209,7 +277,11 @@
     "area": 45339,
     "population": 1366491,
     "density": 30.1,
-    "capital": "Τάλιν",
+    "capital": {
+      "name_el": "Ταλίν",
+      "name_en": "Tallinn",
+      "coordinates": "59.4370, 24.7536"
+    },
     "language": ["Εσθονικά"],
     "countryCode": "ee",
     "article": "της Εσθονίας",
@@ -221,7 +293,11 @@
     "area": 24482,
     "population": 67026292,
     "density": 273.8,
-    "capital": "Λονδίνο",
+    "capital": {
+      "name_el": "Λονδίνο",
+      "name_en": "London",
+      "coordinates": "51.5074, 0.1278"
+    },
     "language": ["Αγγλικά"],
     "countryCode": "gb",
     "article": "του Ηνωμένου Βασιλείου",
@@ -233,7 +309,11 @@
     "area": 70273,
     "population": 5281600,
     "density": 75.2,
-    "capital": "Δουβλίνο",
+    "capital": {
+      "name_el": "Δουβλίνο",
+      "name_en": "Dublin",
+      "coordinates": "53.3498, 6.2603"
+    },
     "language": ["Ιρλανδικά","Αγγλικά"],
     "countryCode": "ie",
     "article": "της Ιρλανδίας",
@@ -245,7 +325,12 @@
     "area": 103,
     "population": 39696,
     "density": 3.9,
-    "capital": "Ρέικιαβικ",
+    "capital": {
+      "name_el": "Ρέικιαβικ",
+      "name_en": "Reykjavik",
+      "coordinates": "64.1466, 21.9426"
+    
+    },
     "language": ["Ισλανδικά"],
     "countryCode": "is",
     "article": "της Ισλανδίας",
@@ -257,7 +342,12 @@
     "area": 504851,
     "population": 48592909,
     "density": 96.3,
-    "capital": "Μαδρίτη",
+    "capital": {
+      "name_el": "Μαδρίτη",
+      "name_en": "Madrid",
+      "coordinates": "40.4168, 3.7038"
+    
+    },
     "language": ["Ισπανικά"],
     "countryCode": "es",
     "article": "της Ισπανίας",
@@ -269,7 +359,11 @@
     "area": 30123,
     "population": 58909449,
     "density": 195.6,
-    "capital": "Ρώμη",
+    "capital": {
+        "name_el": "Ρώμη",
+        "name_en": "Rome",
+        "coordinates": "41.9028, 12.4964"
+    },
     "language": ["Ιταλικά"],
     "countryCode": "it",
     "article": "της Ιταλίας",
@@ -281,7 +375,12 @@
     "area": 148,
     "population": 20033546,
     "density": 7.4,
-    "capital": "Νουρ-Σουλτάν",
+    "capital": {
+      "name_el": "Νουρ-Σουλτάν",
+      "name_en": "Nur-Sultan",
+      "coordinates": "51.1605, 71.4704"
+    
+    },
     "language": ["Καζακικά"],
     "countryCode": "kz",
     "article": "του Καζακστάν",
@@ -293,7 +392,11 @@
     "area": 56542,
     "population": 3855641,
     "density": 68.2,
-    "capital": "Ζάγκρεμπ",
+    "capital": {
+      "name_el": "Ζάγκρεμπ",
+      "name_en": "Zagreb",
+      "coordinates": "45.8150, 15.9819"
+    },
     "language": ["Κροατικά"],
     "countryCode": "hr",
     "article": "της Κροατίας",
@@ -305,7 +408,11 @@
     "area": 9251,
     "population": 918100,
     "density": 99.2,
-    "capital": "Λευκωσία",
+    "capital": {
+      "name_el": "Λευκωσία",
+      "name_en": "Nicosia",
+      "coordinates": "35.1856, 33.3823"
+    },
     "language": ["Eλληνικά", "Τουρκικά"],
     "countryCode": "cy",
     "article": "της Κύπρου",
@@ -317,7 +424,11 @@
     "area": 64589,
     "population": 1872500,
     "density": 29,
-    "capital": "Ρίγα",
+    "capital": {
+      "name_el": "Ρίγα",
+      "name_en": "Riga",
+      "coordinates": "56.9496, 24.1052"
+    },
     "language": ["Λετονικά"],
     "countryCode": "lv",
     "article": "της Λετονίας",
@@ -329,7 +440,11 @@
     "area": 20756,
     "population": 9200600,
     "density": 44.3,
-    "capital": "Μινσκ",
+    "capital": {
+      "name_el": "Μινσκ",
+      "name_en": "Minsk",
+      "coordinates": "53.9045, 27.5615"
+    },
     "language": ["Λευκορωσικά", "Ρωσικά"],
     "countryCode": "by",
     "article": "της Λευκορωσίας",
@@ -341,7 +456,11 @@
     "area": 653,
     "population": 2888269,
     "density": 44.2,
-    "capital": "Βίλνιους",
+    "capital": {
+      "name_el": "Βίλνιους",
+      "name_en": "Vilnius",
+      "coordinates": "54.6872, 25.2797"
+    },
     "language": ["Λιθουανικά"],
     "countryCode":  "lt",
     "article": "της Λιθουανίας",
@@ -353,7 +472,11 @@
     "area": 160,
     "population": 39724,
     "density": 248.3,
-    "capital": "Βαντούζ",
+    "capital": {
+      "name_el": "Βαντούζ",
+      "name_en": "Vaduz",
+      "coordinates": "47.1410, 9.5215"
+    },
     "language": ["Γερμανικά"],
     "countryCode": "li",
     "article": "του Λίχτενσταϊν",
@@ -365,7 +488,11 @@
     "area": 2586,
     "population": 660809,
     "density": 255.5,
-    "capital": "Λουξεμβούργο",
+    "capital": {
+      "name_el": "Λουξεμβούργο",
+      "name_en": "Luxembourg",
+      "coordinates": "49.8153, 6.1296"
+    },
     "language": ["Λουξεμβουργιανά", "Γερμανικά", "Γαλλικά"],
     "countryCode": "lu",
     "article": "του Λουξεμβούργου",
@@ -377,7 +504,11 @@
     "area": 316,
     "population": 542051,
     "density": 1715,
-    "capital": "Βαλέτα",
+    "capital": {
+      "name_el": "Βαλέτα",
+      "name_en": "Valletta",
+      "coordinates": "35.8989, 14.5146"
+    },
     "language": ["Μαλτέζικα", "Αγγλικά"],
     "countryCode": "mt",
     "article": "της Μάλτας",
@@ -389,7 +520,11 @@
     "area": 13812,
     "population": 616695,
     "density": 44.6,
-    "capital": "Ποντγκόριτσα",
+    "capital": {
+        "name_el": "Ποντγκόριτσα",
+        "name_en": "Podgorica",
+        "coordinates": "42.4304, 19.2594"
+    },
     "language": ["Μαυροβουνιακά"],
     "countryCode": "me",
     "article": "του Μαυροβουνίου",
@@ -401,7 +536,11 @@
     "area": 33843,
     "population": 2512800,
     "density": 74.2,
-    "capital": "Κισινάου",
+    "capital": {
+      "name_el": "Κισινάου",
+      "name_en": "Chisinau",
+      "coordinates": "47.0105, 28.8638"
+    },
     "language": ["Μολδαβικά"],
     "countryCode":  "md",
     "article": "της Μολδαβίας",
@@ -413,7 +552,11 @@
     "area": 1.95,
     "population": 39050,
     "density": 20.026,
-    "capital": "Μονακό",
+    "capital": {
+      "name_el": "Μονακό",
+      "name_en": "Monaco",
+      "coordinates": "43.7384, 7.4246"
+    },
     "language": ["Γαλλικά"],
     "countryCode": "mc",
     "article": "του Μονακό",
@@ -425,7 +568,11 @@
     "area": 385178,
     "population": 5550203,
     "density": 14.4,
-    "capital": "Όσλο",
+    "capital": {
+      "name_el": "Οσλο",
+      "name_en": "Oslo",
+      "coordinates": "59.9139, 10.7522"
+    },
     "language": ["Νορβηγικά"],
     "countryCode": "no",
     "article": "της Νορβηγίας",
@@ -437,7 +584,11 @@
     "area": 41543,
     "population": 17947684,
     "density": 432.0,
-    "capital": "Άμστερνταμ",
+    "capital": {
+      "name_el": "Άμστερνταμ",
+      "name_en": "Amsterdam",
+      "coordinates": "52.3676, 4.9041"
+    },
     "language": ["Ολλανδικά"],
     "countryCode": "nl",
     "article": "της Ολλανδίας",
@@ -449,7 +600,11 @@
     "area": 93.03,
     "population": 9599744,
     "density": 103.2,
-    "capital": "Βουδαπέστη",
+    "capital": {
+      "name_el": "Βουδαπέστη",
+      "name_en": "Budapest",
+      "coordinates": "47.4979, 19.0402"
+    },
     "language": ["Ουγγρικά"],
     "countryCode": "hu",
     "article": "της Ουγγαρίας",
@@ -461,7 +616,12 @@
     "area": 603.7,
     "population": 41130432,
     "density": 68.1,
-    "capital": "Κίεβο",
+    "capital": {
+      "name_el": "Κίεβο",
+      "name_en": "Kiev",
+      "coordinates": "50.4501, 30.5234"
+    
+    },
     "language": ["Ουκρανικά"],
     "countryCode": "ua",
     "article": "της Ουκρανίας",
@@ -473,7 +633,11 @@
     "area": 312685,
     "population": 37635000,
     "density": 120.4,
-    "capital": "Βαρσοβία",
+    "capital": {
+      "name_el": "Βαρσοβία",
+      "name_en": "Warsaw",
+      "coordinates": "52.2297, 21.0122"
+    },
     "language": ["Πολωνικά"],
     "countryCode": "pl",
     "article": "της Πολωνίας",
@@ -485,7 +649,11 @@
     "area": 92568,
     "population": 10467366,
     "density": 113.1,
-    "capital": "Λισαβόνα",
+    "capital": {
+      "name_el": "Λισαβόνα",
+      "name_en": "Lisbon",
+      "coordinates": "38.7223, 9.1393"
+    },
     "language": ["Πορτογαλικά"],
     "countryCode": "pt",
     "article": "της Πορτογαλίας",
@@ -497,7 +665,11 @@
     "area": 238391,
     "population": 19051562,
     "density": 79.9,
-    "capital": "Βουκουρέστι",
+    "capital": {
+      "name_el": "Βουκουρέστι",
+      "name_en": "Bucharest",
+      "coordinates": "44.4268, 26.1025"
+    },
     "language": ["Ρουμανικά"],
     "countryCode": "ro",
     "article": "της Ρουμανίας",
@@ -509,7 +681,11 @@
     "area": 17075400,
     "population": 146447400,
     "density": 8.6,
-    "capital": "Μόσχα",
+    "capital": {
+      "name_el": "Μόσχα",
+      "name_en": "Moscow",
+      "coordinates": "55.7558, 37.6176"
+    },
     "language": ["Ρωσικά"],
     "countryCode": "ru",
     "article": "της Ρωσίας",
@@ -521,7 +697,11 @@
     "area": 88361,
     "population": 6641197,
     "density": 75.2,
-    "capital": "Βελιγράδι",
+    "capital": {
+      "name_el": "Βελιγράδι",
+      "name_en": "Belgrade",
+      "coordinates": "44.7866, 20.4489"
+    },
     "language": ["Σερβικά"],
     "countryCode": "rs",
     "article": "της Σερβίας",
@@ -533,7 +713,11 @@
     "area": 49035,
     "population": 5426468,
     "density": 110.7,
-    "capital": "Μπρατισλάβα",
+    "capital": {
+      "name_el": "Μπρατισλάβα",
+      "name_en": "Bratislava",
+      "coordinates": "48.1486, 17.1077"
+    },
     "language": ["Σλοβακικά"],
     "countryCode": "sk",
     "article": "της Σλοβακίας",
@@ -545,7 +729,11 @@
     "area": 20273,
     "population": 2123103,
     "density": 104.7,
-    "capital": "Λιουμπλιάνα",
+    "capital": {
+      "name_el": "Λιουμπλιάνα",
+      "name_en": "Ljubljana",
+      "coordinates": "46.0569, 14.5058"
+    },
     "language": ["Σλοβενικά"],
     "countryCode": "si",
     "article": "της Σλοβενίας",
@@ -557,7 +745,11 @@
     "area": 449964,
     "population": 10551707,
     "density": 23.5,
-    "capital": "Στοκχόλμη",
+    "capital": {
+      "name_el": "Στοκχόλμη",
+      "name_en": "Stockholm",
+      "coordinates": "59.3293, 18.0686"
+    },
     "language": ["Σουηδικά"],
     "countryCode": "se",
     "article": "της Σουηδίας",
@@ -569,7 +761,11 @@
     "area": 783562,
     "population": 85372377,
     "density": 109,
-    "capital": "Άγκυρα",
+    "capital": {
+      "name_el": "Άγκυρα",
+      "name_en": "Ankara",
+      "coordinates": "39.9334, 32.8597"
+    },
     "language": ["Τουρκικά"],
     "countryCode": "tr",
     "article": "της Τουρκίας",
@@ -581,7 +777,11 @@
     "area": 78866,
     "population": 10882235,
     "density": 138,
-    "capital": "Πράγα",
+    "capital": {
+      "name_el": "Πράγα",
+      "name_en": "Prague",
+      "coordinates": "50.0755, 14.4378"
+    },
     "language": ["Τσεχικά"],
     "countryCode": "cz",
     "article": "της Τσεχίας",
@@ -593,7 +793,11 @@
     "area": 336593,
     "population": 5604558,
     "density": 16.6,
-    "capital": "Ελσίνκι",
+    "capital": {
+      "name_el": "Ελσίνκι",
+      "name_en": "Helsinki",
+      "coordinates": "60.1695, 24.9354"
+    },
     "language": ["Φινλανδικά"],
     "countryCode": "fi",
     "article": "της Φινλανδίας",

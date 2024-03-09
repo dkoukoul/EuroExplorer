@@ -20,7 +20,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import java.util.Locale
+import com.google.android.gms.maps.model.MapStyleOptions
 
 class SingleTapMapClickListener(private val actualListener: GoogleMap.OnMapClickListener) : GoogleMap.OnMapClickListener {
     private var lastClickTime: Long = 0
@@ -41,24 +41,25 @@ class MapsFragment : Fragment() {
     private lateinit var airplane: ImageView
     private lateinit var gameLogic: Game
     private lateinit var googleMap: GoogleMap
+    private lateinit var flag: ImageView
 
     private val callback = OnMapReadyCallback { gM ->
         googleMap = gM
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_style));
         val europe = LatLng(54.5260, 15.2551)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(europe,3.5f))
         googleMap.setOnMapClickListener(SingleTapMapClickListener { latLng ->
-            val geocoder = context?.let { Geocoder(it, Locale("el")) }
+            val geocoder = context?.let { Geocoder(it) }
             try {
                 if (gameLogic.gameType == GameTypes.CAPITAL) {
-                    val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 10)
-                    addresses?.let {
-                        val result = gameLogic.checkAnswers(it)
+                    val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 1)
+
+                    val result = addresses?.get(0)?.let { gameLogic.checkAnswerCapital(it) }
+                    if (result != null) {
                         setAnswer(result.first, result.second)
                         updateScore()
-                    } ?: run {
-                        // Handle the case where addresses is null
-                        Log.e("MapsFragment", "No addresses found")
                     }
+
                 } else if (gameLogic.gameType == GameTypes.COUNTRY) {
                     val addresses = geocoder?.getFromLocation(latLng.latitude, latLng.longitude, 1)
                     if (addresses.isNullOrEmpty()) {
@@ -69,6 +70,9 @@ class MapsFragment : Fragment() {
                         setAnswer(result.first, result.second)
                         updateScore()
                     }
+                } else if (gameLogic.gameType == GameTypes.FLAG) {
+                    Log.e("MapsFragment", "Game type not supported")
+
                 } else {
                     Log.e("MapsFragment", "Game type not supported")
                 }
@@ -85,25 +89,24 @@ class MapsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_maps, container, false)
+
         gameLogic = Game(requireContext())
         question = view.findViewById(R.id.question)
         notification = view.findViewById(R.id.notification)
         score = view.findViewById(R.id.score)
         airplane = view.findViewById(R.id.airplane)
         question.text = gameLogic.getQuestion()
+        flag = view.findViewById(R.id.flagImage)
+        flag.visibility = View.INVISIBLE
 
         return view
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-    }
-
-    private fun loadQuestion() {
-        question.text = gameLogic.getQuestion()
-        hideNotification()
     }
 
     private fun hideNotification() {
@@ -153,8 +156,7 @@ class MapsFragment : Fragment() {
         val scoreAnimatorX: ObjectAnimator = ObjectAnimator.ofFloat<View>(
             score,
             View.SCALE_X,
-            1f,
-            2f
+            1f, 2f
         )
         scoreAnimatorX.setDuration(1000) // Duration of animation in milliseconds
 
@@ -203,10 +205,18 @@ class MapsFragment : Fragment() {
             question.text = gameLogic.getQuestion()
             if (gameLogic.gameType == GameTypes.CAPITAL) {
                 val country = gameLogic.getCurrentCountry()
-                if (country != null) {
-                    val latLng = LatLng(country.coordinates.split(",")[0].toDouble(), country.coordinates.split(",")[1].toDouble())
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5.0f))
-                }
+                val latLng = LatLng(
+                    country.coordinates.split(",")[0].toDouble(),
+                    country.coordinates.split(",")[1].toDouble()
+                )
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5.0f))
+            } else if (gameLogic.gameType == GameTypes.FLAG) {
+                Log.e("MapsFragment", "Game type not supported")
+                val drawableId = gameLogic.getCurrentFlag()
+                val drawableFlag = ContextCompat.getDrawable(requireContext(), drawableId)
+                flag.setImageDrawable(drawableFlag)
+            } else {
+                Log.e("MapsFragment", "Game type not supported")
             }
         } catch (e: Exception) {
             Log.e("MapsFragment", "Error getting next question", e)

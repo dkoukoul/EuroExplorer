@@ -2,6 +2,7 @@ package co.adaptive.euroexplorer
 
 import android.content.Context
 import android.location.Address
+import android.location.Location
 import android.util.Log
 import co.adaptive.euroexplorer.dto.Country
 import co.adaptive.euroexplorer.dto.Question
@@ -73,6 +74,8 @@ class Game(private val context: Context) {
             getQuestionCapital()
         } else if (gameType == GameTypes.COUNTRY) {
             getCountryQuestion()
+        } else if (gameType == GameTypes.FLAG) {
+            getQuestionFlag()
         } else {
             Log.e(TAG, "Invalid game type")
             ""
@@ -102,11 +105,22 @@ class Game(private val context: Context) {
         return question
     }
 
+    private fun getQuestionFlag(): String {
+        var question = context.getString(R.string.question_flag)
+        val possibleQuestions = (countries.indices).toMutableList()
+        possibleQuestions.removeAll(questionsCapitalsAsked)
+        if (possibleQuestions.isEmpty()) {
+            Log.w(TAG, "No more questions to ask")
+        }
+        currentQuestion = possibleQuestions[Random.nextInt(possibleQuestions.size)]
+        return question
+    }
+
     private fun getCurrentCountryName(): String {
         return countries[currentQuestion].name
     }
 
-    fun getCurrentCountry(): Country? {
+    fun getCurrentCountry(): Country {
         return countries[currentQuestion]
     }
 
@@ -115,8 +129,43 @@ class Game(private val context: Context) {
         return checkAnswerCountry(answer)
     }
 
+    fun checkAnswerCapital(address: Address): Pair<Boolean, String> {
+        val userLat = address.latitude
+        val userLon = address.longitude
+        val coords = getCurrentCapitalCoords()
+
+        val results = FloatArray(1)
+
+        Location.distanceBetween(userLat, userLon, coords.first, coords.second, results)
+
+        val distanceInMeters = results[0]
+        //Accept as correct when within 15km
+        return if (distanceInMeters < 15000) {
+            setScore(correct = true)
+            Pair(true, countries[currentQuestion].capital.name_el)
+        } else {
+            setScore(correct = false)
+            Pair(false, countries[currentQuestion].capital.name_el)
+        }
+    }
+
+    fun getCurrentFlag(): Int {
+        return context.resources.getIdentifier("flag_${countries[currentQuestion].countryCode}", "drawable", context.packageName)
+    }
+
+    private fun getCurrentCapitalCoords(): Pair<Double, Double> {
+        try {
+            val capitalCoords = countries[currentQuestion].capital.coordinates
+            val coords = capitalCoords.split(",")
+            return Pair(coords[0].toDouble(), coords[1].toDouble())
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting capital coordinates", e)
+            return Pair(0.0, 0.0)
+        }
+    }
+
     fun checkAnswers(answers: List<Address>): Pair<Boolean, String> {
-        val correctAnswer = countries[currentQuestion].capital
+        val correctAnswer = countries[currentQuestion].capital.name_el
         if (gameType == GameTypes.CAPITAL) {
             for (address in answers) {
                 if ((!address.adminArea.isNullOrEmpty() && checkAnswerCapital(address.adminArea)) ||
@@ -138,7 +187,7 @@ class Game(private val context: Context) {
         }
     }
     private fun checkAnswerCapital(answer: String): Boolean {
-        val correctAnswer = countries[currentQuestion].capital
+        val correctAnswer = countries[currentQuestion].capital.name_el
         if (answer.contains(correctAnswer)) {
             return true
         }

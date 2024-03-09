@@ -11,6 +11,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:liteMode="true"
         />
     <LinearLayout
         android:id="@+id/topbar"
@@ -42,20 +43,40 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/question"
+    <RelativeLayout
+        android:id="@+id/cloudsContainer"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text=""
-        android:textSize="18sp"
-        android:textColor="@color/text"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
-        android:layout_marginHorizontal="20dp"
-        android:background="@drawable/clouds"
-        />
+        android:layout_marginHorizontal="20dp">
+
+        <ImageView
+            android:id="@+id/cloudsImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/clouds" />
+
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/question_capital"
+            android:textSize="18sp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="60dp"
+            android:textColor="@color/text" />
+
+        <ImageView
+            android:id="@+id/flagImage"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:visibility="invisible"
+            android:src="@drawable/flag_at" />
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/airplane"

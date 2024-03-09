@@ -4,6 +4,7 @@
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/text</item>
+        <item name="android:fontFamily">@font/notosansdisplay</item>
     </style>
 
     <style name="Theme.EuroExplorer" parent="Base.Theme.EuroExplorer" />

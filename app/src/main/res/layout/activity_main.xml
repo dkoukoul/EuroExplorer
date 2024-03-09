@@ -13,6 +13,10 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <Button
             android:id="@+id/button_new_capitals"
             android:layout_width="match_parent"
@@ -20,7 +24,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginHorizontal="40dp"
             android:textSize="22dp"
-            android:text="European Capitals" />
+            android:text="@string/button_capitals" />
 
         <Button
             android:id="@+id/button_new_countries"
@@ -29,7 +33,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginHorizontal="40dp"
             android:textSize="22dp"
-            android:text="European Countries" />
+            android:text="@string/button_countries" />
 
         <Button
             android:id="@+id/button_new_flags"
@@ -38,7 +42,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginHorizontal="40dp"
             android:textSize="22dp"
-            android:text="European Flags" />
+            android:text="@string/button_flags" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

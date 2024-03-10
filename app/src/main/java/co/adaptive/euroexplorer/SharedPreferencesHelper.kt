@@ -27,6 +27,16 @@ class SharedPreferencesHelper(context: Context) {
         }
     }
 
+    fun setHighScore(score: Int) {
+        val editor = sharedPreferences.edit()
+        editor.putInt("HighScore", score)
+        editor.apply()
+    }
+
+    fun getHighScore(): Int {
+        return sharedPreferences.getInt("HighScore", 0)
+    }
+
     fun saveApplicationStatus(status: String) {
         val editor = sharedPreferences.edit()
         editor.putString("GameStatus", status)

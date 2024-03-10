@@ -22,6 +22,7 @@ class Game(private val context: Context) {
         private var questionsCapitalsAsked = mutableListOf<Int>()
         private var questions = mutableListOf<Question>()
         private var countries = mutableListOf<Country>()
+        private var numOfQuestions = 0
     }
 
     var gameType: GameTypes = GameTypes.CAPITAL
@@ -71,6 +72,7 @@ class Game(private val context: Context) {
 
     // Method to get a question
     fun getQuestion(): String {
+        numOfQuestions++
         return if (gameType == GameTypes.CAPITAL) {
             getQuestionCapital()
         } else if (gameType == GameTypes.COUNTRY) {
@@ -81,6 +83,18 @@ class Game(private val context: Context) {
             Log.e(TAG, "Invalid game type")
             ""
         }
+    }
+
+    fun getNumOfQuestions(): Int {
+        return numOfQuestions
+    }
+
+    fun resetGame() {
+        score = 0
+        questionsCountriesAsked = mutableListOf()
+        questionsFlagsAsked = mutableListOf()
+        questionsCapitalsAsked = mutableListOf()
+        numOfQuestions = 0
     }
 
     private fun getCountryQuestion(): String {
@@ -131,7 +145,13 @@ class Game(private val context: Context) {
 
     // Method to check if the given answer is correct
     fun checkAnswer(answer: String): Pair<Boolean, String> {
-        return checkAnswerCountry(answer)
+        if (gameType == GameTypes.FLAG) {
+            return checkAnswerFlag(answer)
+        } else if (gameType == GameTypes.COUNTRY) {
+            return checkAnswerCountry(answer)
+        }
+        Log.e(TAG, "Invalid game type")
+        return Pair(false, "")
     }
 
     fun checkAnswerCapital(address: Address): Pair<Boolean, String> {
@@ -159,13 +179,13 @@ class Game(private val context: Context) {
     }
 
     private fun getCurrentCapitalCoords(): Pair<Double, Double> {
-        try {
+        return try {
             val capitalCoords = countries[currentQuestion].capital.coordinates
             val coords = capitalCoords.split(",")
-            return Pair(coords[0].toDouble(), coords[1].toDouble())
+            Pair(coords[0].toDouble(), coords[1].toDouble())
         } catch (e: Exception) {
             Log.e(TAG, "Error getting capital coordinates", e)
-            return Pair(0.0, 0.0)
+            Pair(0.0, 0.0)
         }
     }
 
@@ -178,7 +198,6 @@ class Game(private val context: Context) {
                     (!address.locality.isNullOrEmpty() && checkAnswerCapital(address.locality)) ||
                     (!address.featureName.isNullOrEmpty() && checkAnswerCapital(address.featureName)) ||
                     (!address.subLocality.isNullOrEmpty() && checkAnswerCapital(address.subLocality))){
-
                     setScore(true)
                     return Pair(true, correctAnswer)
                 }
@@ -200,9 +219,17 @@ class Game(private val context: Context) {
         return false
     }
 
+    private fun checkAnswerFlag(answer: String): Pair<Boolean, String> {
+        val correctAnswer = countries[currentQuestion].name
+        setScore(answer == correctAnswer)
+        Log.d(TAG, "[checkAnswerFlag] Correct answer: $correctAnswer, User answer: $answer")
+        return Pair(answer == correctAnswer, correctAnswer)
+    }
+
     private fun checkAnswerCountry(answer: String): Pair<Boolean, String> {
         val correctAnswer = questions[currentQuestion].correct_answer
         setScore(answer == correctAnswer)
+        Log.d(TAG, "[checkAnswerCountry] Correct answer: $correctAnswer, User answer: $answer")
         return Pair(answer == correctAnswer, correctAnswer)
     }
 

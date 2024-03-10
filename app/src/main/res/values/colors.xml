@@ -8,6 +8,8 @@
 
     <color name="primary">#4db9bd</color>
     <color name="secondary">#b3afc5</color>
-    <color name="accent">#9e8fad</color>
+    <color name="accent">#C0D6DD</color>
     <color name="text">#111717</color>
+
+    <color name="cloud">#FFC0D6DD</color>
 </resources>

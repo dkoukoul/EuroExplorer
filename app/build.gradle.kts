@@ -1,3 +1,4 @@
+import java.util.Calendar
 import java.util.Properties
 
 plugins {
@@ -16,8 +17,12 @@ android {
         applicationId = "co.adaptive.euroexplorer"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        val calendar = Calendar.getInstance()
+        val month = calendar.get(Calendar.MONTH) + 1
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        versionCode = 10000 + month * 100 + day
+        versionName = "1.$month.$day"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         val properties = Properties()
@@ -59,6 +64,10 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-ads:23.0.0")
     implementation(libs.play.services.ads.lite)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

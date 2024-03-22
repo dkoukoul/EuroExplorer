@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import co.adaptive.euroexplorer.dto.GameLevel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
@@ -19,13 +19,12 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import java.util.concurrent.atomic.AtomicBoolean
 
 
-
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), GameLevelsAdapter.OnLevelClickListener {
 
     private var interstitialAd: InterstitialAd? = null
     private val isMobileAdsInitializeCalled = AtomicBoolean(false)
     private var adIsLoading: Boolean = false
-    val AD_UNIT_ID = "ca-app-pub-4186914237786348~7546328190"
+    val AD_UNIT_ID = "ca-app-pub-4186914237786348/1599032792"
     private final val TAG = "MainActivity"
     private var gameCount = 0
 
@@ -55,13 +54,16 @@ class MainActivity : AppCompatActivity() {
             sharedPreferencesHelper.saveGameType(GameTypes.FLAG)
             loadMap()
         }
-
+        val buttonLevels = findViewById<Button>(R.id.button_continue)
+        buttonLevels.setOnClickListener {
+            //sharedPreferencesHelper.saveGameType(GameTypes.COUNTRY)
+            loadLevelSelection()
+        }
         updateHighScore()
         initializeMobileAdsSdk()
         MobileAds.setRequestConfiguration(
             RequestConfiguration.Builder().setTestDeviceIds(listOf("ABCDEF012345")).build()
         )
-//        showInterstitial()
     }
 
     override fun onBackPressed() {
@@ -69,9 +71,19 @@ class MainActivity : AppCompatActivity() {
         if (currentFragment is MapsFragment) {
             supportFragmentManager.beginTransaction().remove(currentFragment).commit()
             updateHighScore()
+        } else if (currentFragment is GameLevelsFragment) {
+            supportFragmentManager.beginTransaction().remove(currentFragment).commit()
+            updateHighScore()
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onLevelClick(level: GameLevel) {
+        Log.d(TAG, "Level ${level.level} clicked")
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.main, MapsFragment())
+        transaction.commit()
     }
 
     private fun updateHighScore() {
@@ -91,17 +103,39 @@ class MainActivity : AppCompatActivity() {
         // Initialize the Mobile Ads SDK.
         MobileAds.initialize(this) { initializationStatus ->
             // Load an ad.
-            //loadAd()
+            loadAd()
         }
     }
 
     private fun loadMap() {
         Log.d(TAG, "[loadMap]")
         if (gameCount > 0) {
-//            loadAd()
+            if (interstitialAd != null) {
+                interstitialAd?.show(this)
+                interstitialAd = null
+            }
+            loadAd()
         }
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.main, MapsFragment())
+        transaction.commit()
+        gameCount++
+    }
+
+    private fun loadLevelSelection() {
+        Log.d(TAG, "[loadLevelSelection]")
+/*        if (gameCount > 0) {
+            if (interstitialAd != null) {
+                interstitialAd?.show(this)
+                interstitialAd = null
+            }
+            loadAd()
+        }*/
+
+        //TEST
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.main, GameLevelsFragment())
         transaction.commit()
         gameCount++
     }
@@ -126,21 +160,12 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, adError.message)
                     interstitialAd = null
                     adIsLoading = false
-                    val error =
-                        "domain: ${adError.domain}, code: ${adError.code}, " + "message: ${adError.message}"
-                    Toast.makeText(
-                        this@MainActivity,
-                        "onAdFailedToLoad() with error $error",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
                 }
 
                 override fun onAdLoaded(ad: InterstitialAd) {
                     Log.d(TAG, "Ad was loaded.")
                     interstitialAd = ad
                     adIsLoading = false
-                    Toast.makeText(this@MainActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
                 }
             }
         )

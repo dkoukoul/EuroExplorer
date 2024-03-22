@@ -59,6 +59,7 @@ class MapsFragment : Fragment() {
     private lateinit var googleMap: GoogleMap
     private lateinit var flag: ImageView
     private lateinit var cloudsContainer: View
+    private lateinit var cloudImage: ImageView
 
     private val callback = OnMapReadyCallback { gM ->
         googleMap = gM
@@ -90,6 +91,8 @@ class MapsFragment : Fragment() {
             }
             nextQuestion()
         })
+        // Start the game
+        nextQuestion()
     }
 
 
@@ -113,13 +116,16 @@ class MapsFragment : Fragment() {
         gameOverLayout = view.findViewById(R.id.gameoverlayout)
         gameOverLayout.visibility = View.GONE
         flag.visibility = View.GONE
+        question.visibility = View.VISIBLE
         topBar.visibility = View.VISIBLE
         cloudsContainer.visibility = View.VISIBLE
+        cloudImage = view.findViewById(R.id.cloudsImage)
+        cloudImage.visibility = View.VISIBLE
 
         gameOverButton.setOnClickListener {
             activity?.onBackPressed()
         }
-        nextQuestion()
+
         return view
     }
 
@@ -200,8 +206,8 @@ class MapsFragment : Fragment() {
                 flag.setImageDrawable(drawableFlag)
                 flag.visibility = View.VISIBLE
                 question.gravity = Gravity.START or Gravity.CENTER_VERTICAL
-            } else {
-                Log.e(TAG, "Game type not supported")
+                question.visibility = View.INVISIBLE
+                cloudImage.visibility = View.INVISIBLE
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error getting next question", e)

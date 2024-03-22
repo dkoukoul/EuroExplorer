@@ -11,5 +11,8 @@
     <color name="accent">#C0D6DD</color>
     <color name="text">#111717</color>
 
-    <color name="cloud">#FFC0D6DD</color>
+    <color name="cloud">#E0EFF4</color>
+    <color name="gold">#FFD700</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="bronze">#CD7F32</color>
 </resources>
